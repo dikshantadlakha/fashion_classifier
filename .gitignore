@@ -1,5 +1,1 @@
-*.csv
-dataset/*.csv
-__pycache__/
-*.pyc
-pt_file/vgg16_model.pt
+fashion-mnist_train.csv

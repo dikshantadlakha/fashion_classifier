@@ -15,7 +15,7 @@ CSV_PATH = os.path.join(BASE_DIR, "dataset", "fmnist_small.csv")
 ANN_MODEL_PATH = os.path.join(BASE_DIR, "pt_file", "ann_model.pt")
 OPTIMIZED_ANN_MODEL_PATH = os.path.join(BASE_DIR, "pt_file", "ann_optimised_model (1).pt")
 CNN_MODEL_PATH = os.path.join(BASE_DIR, "pt_file", "cnn_model (6).pt")
-VGG16_MODEL_PATH = os.path.join(BASE_DIR, "pt_file", "vgg16_model.pt")
+RESNET18_MODEL_PATH = os.path.join(BASE_DIR, "pt_file", "resnet18_fmnist.pt")
 
 HYPERPARAM_ANN_MODEL_CANDIDATES = [
     os.path.join(BASE_DIR, "pt_file", "ann_hyperparametrised_model.pt"),
@@ -129,17 +129,15 @@ class CNNModel(nn.Module):
         return self.classifier(x)
 
 
-def build_vgg16_model():
-    model = models.vgg16(weights=None)
+def build_resnet18_model():
+    model = models.resnet18(weights=None)
 
-    for param in model.features.parameters():
+    for param in model.parameters():
         param.requires_grad = False
 
-    model.classifier = nn.Sequential(
-        nn.Linear(25088, 1024),
-        nn.ReLU(),
-        nn.Dropout(0.5),
-        nn.Linear(1024, 512),
+    num_features = model.fc.in_features
+    model.fc = nn.Sequential(
+        nn.Linear(num_features, 512),
         nn.ReLU(),
         nn.Dropout(0.5),
         nn.Linear(512, 10),
@@ -156,7 +154,7 @@ def resolve_existing_path(path_candidates):
     raise FileNotFoundError(f"None of these model files were found: {path_candidates}")
 
 
-VGG16_TRANSFORM = transforms.Compose(
+RESNET18_TRANSFORM = transforms.Compose(
     [
         transforms.Resize(256),
         transforms.CenterCrop(224),
@@ -181,9 +179,9 @@ def row_to_image_and_tensor(row):
     rgb_pixels = np.stack([pixels.reshape(28, 28)] * 3, axis=-1)
     rgb_image = Image.fromarray(rgb_pixels)
 
-    vgg16_tensor = VGG16_TRANSFORM(rgb_image).unsqueeze(0)
+    resnet18_tensor = RESNET18_TRANSFORM(rgb_image).unsqueeze(0)
 
-    return label, image, flat_tensor, image_tensor, vgg16_tensor
+    return label, image, flat_tensor, image_tensor, resnet18_tensor
 
 
 def load_class_samples():
@@ -192,7 +190,7 @@ def load_class_samples():
     for class_index, class_name in enumerate(CLASS_NAMES):
         row = dataset_df[dataset_df.iloc[:, 0] == class_index].sample(n=1).iloc[0]
 
-        label, image, flat_tensor, image_tensor, vgg16_tensor = row_to_image_and_tensor(row)
+        label, image, flat_tensor, image_tensor, resnet18_tensor = row_to_image_and_tensor(row)
 
         class_samples.append(
             {
@@ -201,7 +199,7 @@ def load_class_samples():
                 "image": image,
                 "flat_tensor": flat_tensor,
                 "image_tensor": image_tensor,
-                "vgg16_tensor": vgg16_tensor,
+                "resnet18_tensor": resnet18_tensor,
                 "gallery_caption": f"{class_index}: {class_name}",
             }
         )
@@ -251,10 +249,10 @@ def load_hyperparameterized_model(model_path):
     return model
 
 
-def load_vgg16_model(model_path):
+def load_resnet18_model(model_path):
     state_dict = torch.load(model_path, map_location="cpu")
 
-    model = build_vgg16_model()
+    model = build_resnet18_model()
     model.load_state_dict(state_dict)
     model.eval()
 
@@ -341,11 +339,11 @@ MODEL_SPECS = [
         "input_key": "image_tensor",
     },
     {
-        "key": "vgg16_transfer_learning",
-        "title": "VGG16 Transfer Learning",
-        "loader": load_vgg16_model,
-        "model_path": VGG16_MODEL_PATH,
-        "input_key": "vgg16_tensor",
+        "key": "resnet18_transfer_learning",
+        "title": "ResNet18 Transfer Learning",
+        "loader": load_resnet18_model,
+        "model_path": RESNET18_MODEL_PATH,
+        "input_key": "resnet18_tensor",
     },
 ]
 
@@ -368,6 +366,13 @@ MODELS = {
 
 
 def format_prediction_result(sample_index, current_samples):
+    if current_samples is None:
+        current_samples = load_class_samples()
+
+    if sample_index is None:
+        sample_index = 0
+
+    sample_index = int(sample_index)
     sample = current_samples[sample_index]
 
     true_class = f'{sample["class_name"]} ({sample["label"]})'
@@ -497,4 +502,4 @@ with gr.Blocks() as demo:
 
 
 if __name__ == "__main__":
-    demo.launch()
+    demo.launch(show_error=True)
