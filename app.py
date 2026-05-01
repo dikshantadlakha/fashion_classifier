@@ -1249,7 +1249,7 @@ def on_gallery_select(current_samples, evt: gr.SelectData):
     return format_prediction_result(evt.index, current_samples)
 
 
-with gr.Blocks(css=APP_CSS) as demo:
+with gr.Blocks() as demo:
     result_feedback_js = f"""
     (samples) => {{
         {FEEDBACK_JS}
@@ -1398,5 +1398,5 @@ with gr.Blocks(css=APP_CSS) as demo:
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 7860))
     demo.queue()
-    demo.launch(server_name="0.0.0.0", server_port=port, show_error=True)
+    demo.launch(server_name="0.0.0.0", server_port=port, show_error=True, css=APP_CSS)
 
