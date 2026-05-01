@@ -1274,11 +1274,11 @@ with gr.Blocks() as demo:
     }}
     """
 
-    gr.Markdown(
+    gr.HTML(
         """
         <div style="background: linear-gradient(135deg, #1e293b 0%, #334155 50%, #475569 100%); padding: 42px 44px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255, 255, 255, 0.16); box-shadow: 0 28px 70px rgba(0, 0, 0, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.12);">
             <div style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: 12px; padding: 6px 10px; border-radius: 999px; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; border: 1px solid rgba(203, 213, 225, 0.42); background: rgba(203, 213, 225, 0.08); color: #e5e7eb; font-family: 'Arial Black', 'Segoe UI Black', sans-serif; letter-spacing: 0.12em;">Live prediction arena</div>
-            <h1 style="margin: 0 0 14px; width: fit-content; color: #f8fafc; background: none; -webkit-text-fill-color: #f8fafc; font-family: Impact, Haettenschweiler, 'Arial Black', 'Segoe UI Black', sans-serif; font-size: clamp(3.8rem, 8vw, 7.2rem); font-weight: 900; letter-spacing: 0.065em; line-height: 0.9; text-transform: uppercase; text-shadow: 1px 1px 0 #94a3b8, 3px 4px 0 #1f2937, 0 16px 34px rgba(0, 0, 0, 0.62);">Battle of the Models</h1>
+            <h1 style="margin: 0 0 14px; width: fit-content; color: #f8fafc; background: none; font-family: Impact, Haettenschweiler, 'Arial Black', 'Segoe UI Black', sans-serif; font-size: clamp(3.8rem, 8vw, 7.2rem); font-weight: 900; letter-spacing: 0.065em; line-height: 0.9; text-transform: uppercase; text-shadow: 1px 1px 0 #94a3b8, 3px 4px 0 #1f2937, 0 16px 34px rgba(0, 0, 0, 0.62);">Battle of the Models</h1>
             <p style="max-width: 760px; margin: 0 0 8px; line-height: 1.55; color: #d7dde8; font-size: 1.05rem; font-family: 'Segoe UI', Arial, sans-serif; letter-spacing: 0.015em;"><strong style="color: #ffffff; font-weight: 760;">Not all models think the same.</strong> Compare predictions across various models in real time.</p>
             <p style="max-width: 760px; margin: 0 0 8px; line-height: 1.55; color: #d7dde8; font-size: 1.05rem; font-family: 'Segoe UI', Arial, sans-serif; letter-spacing: 0.015em;">Pick an image and see where models agree — and where they fail.</p>
             <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px;">
