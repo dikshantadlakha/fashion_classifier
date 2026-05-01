@@ -1396,7 +1396,6 @@ with gr.Blocks() as demo:
 
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 7860))
     demo.queue()
-    demo.launch(server_name="0.0.0.0", server_port=port, show_error=True, css=APP_CSS)
+    demo.launch(show_error=True, css=APP_CSS)
 
