@@ -369,9 +369,7 @@ APP_CSS = r"""
         padding: 18px 22px;
         border: 1px solid rgba(255, 255, 255, 0.24);
         border-radius: 8px;
-        background:
-            radial-gradient(circle at 12% 0%, rgba(255, 255, 255, 0.22), transparent 24%),
-            linear-gradient(135deg, rgba(17, 24, 39, 0.96), rgba(75, 85, 99, 0.94));
+        background: linear-gradient(135deg, rgba(10, 15, 25, 0.98), rgba(30, 40, 55, 0.96)) !important;
         color: #ffffff;
         box-shadow:
             0 24px 56px rgba(0, 0, 0, 0.38),
